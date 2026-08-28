@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const getApiBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
-    if (window.location.hostname.includes('github.io')) {
-      return 'https://ekyc-ai-backend.onrender.com/api/v1';
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8000/api/v1';
     }
   }
   return '/api/v1';
@@ -11,8 +11,8 @@ const getApiBaseUrl = (): string => {
 
 const getStaticBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
-    if (window.location.hostname.includes('github.io')) {
-      return 'https://ekyc-ai-backend.onrender.com';
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8000';
     }
   }
   return '';
