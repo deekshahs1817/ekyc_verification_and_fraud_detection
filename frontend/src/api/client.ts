@@ -1,7 +1,25 @@
 import axios from 'axios';
 
-export const API_BASE_URL = '/api/v1';
-export const STATIC_BASE_URL = '';
+const getApiBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname.includes('github.io')) {
+      return 'https://ekyc-ai-backend.onrender.com/api/v1';
+    }
+  }
+  return '/api/v1';
+};
+
+const getStaticBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname.includes('github.io')) {
+      return 'https://ekyc-ai-backend.onrender.com';
+    }
+  }
+  return '';
+};
+
+export const API_BASE_URL = getApiBaseUrl();
+export const STATIC_BASE_URL = getStaticBaseUrl();
 
 const client = axios.create({
   baseURL: API_BASE_URL,
