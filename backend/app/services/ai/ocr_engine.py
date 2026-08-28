@@ -26,13 +26,16 @@ class OCREngine:
 
     def __init__(self):
         self.easy_reader = None
-        if EASY_AVAILABLE:
+
+    def _get_reader(self):
+        if self.easy_reader is None and EASY_AVAILABLE:
             try:
-                torch.set_num_threads(4)
+                torch.set_num_threads(2)
                 self.easy_reader = easyocr.Reader(['en'], gpu=False, verbose=False, quantize=True)
                 logger.info("High-Performance EasyOCR engine initialized.")
             except Exception as e:
                 logger.warning(f"EasyOCR init fallback: {e}")
+        return self.easy_reader
 
     def _preprocess_image(self, img: np.ndarray) -> np.ndarray:
         """
@@ -62,15 +65,16 @@ class OCREngine:
             return {"raw_text": "", "lines": [], "extracted_fields": {}}
 
         extracted_lines: List[str] = []
+        reader = self._get_reader()
 
-        if self.easy_reader:
+        if reader:
             try:
                 img = cv2.imread(img_path)
                 if img is not None:
                     h, w = img.shape[:2]
                     # Pass 1: High-resolution CLAHE enhanced pass for names, initials, and addresses
                     enhanced = self._preprocess_image(img)
-                    lines_enh = self.easy_reader.readtext(
+                    lines_enh = reader.readtext(
                         enhanced,
                         detail=0,
                         batch_size=4,
@@ -82,7 +86,7 @@ class OCREngine:
                     # Pass 2: Fast fallback on original image if DOB was missed
                     raw_check = " ".join(extracted_lines)
                     if not re.search(r'\b([0-9]{1,2}[/-][0-9]{1,2}[/-][12][09][0-9]{2})\b', raw_check):
-                        lines_orig = self.easy_reader.readtext(
+                        lines_orig = reader.readtext(
                             img,
                             detail=0,
                             batch_size=4,

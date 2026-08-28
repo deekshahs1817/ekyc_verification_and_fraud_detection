@@ -31,14 +31,48 @@ class KYCAIPipeline:
     """
 
     def __init__(self):
-        logger.info("Initializing KYC AI Pipeline Services...")
-        self.doc_classifier = DocumentClassifier()
-        self.ocr_engine = OCREngine()
-        self.similarity_engine = SimilarityEngine()
-        self.face_verifier = FaceVerifier()
-        self.tamper_detector = TamperDetector()
-        self.fraud_predictor = XGBoostFraudPredictor()
-        logger.info("KYC AI Pipeline Services Ready.")
+        self._doc_classifier = None
+        self._ocr_engine = None
+        self._similarity_engine = None
+        self._face_verifier = None
+        self._tamper_detector = None
+        self._fraud_predictor = None
+
+    @property
+    def doc_classifier(self):
+        if self._doc_classifier is None:
+            self._doc_classifier = DocumentClassifier()
+        return self._doc_classifier
+
+    @property
+    def ocr_engine(self):
+        if self._ocr_engine is None:
+            self._ocr_engine = OCREngine()
+        return self._ocr_engine
+
+    @property
+    def similarity_engine(self):
+        if self._similarity_engine is None:
+            self._similarity_engine = SimilarityEngine()
+        return self._similarity_engine
+
+    @property
+    def face_verifier(self):
+        if self._face_verifier is None:
+            self._face_verifier = FaceVerifier()
+        return self._face_verifier
+
+    @property
+    def tamper_detector(self):
+        if self._tamper_detector is None:
+            self._tamper_detector = TamperDetector()
+        return self._tamper_detector
+
+    @property
+    def fraud_predictor(self):
+        if self._fraud_predictor is None:
+            self._fraud_predictor = XGBoostFraudPredictor()
+        return self._fraud_predictor
 
     def run_full_pipeline(
         self,
