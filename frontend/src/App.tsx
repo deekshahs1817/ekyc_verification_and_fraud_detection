@@ -64,7 +64,7 @@ export const App: React.FC = () => {
   return (
     <AppThemeProvider>
       <CssBaseline />
-      <Router>
+      <Router basename={process.env.PUBLIC_URL || ''}>
         <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
           <Navbar />
           <Box sx={{ flexGrow: 1 }}>
