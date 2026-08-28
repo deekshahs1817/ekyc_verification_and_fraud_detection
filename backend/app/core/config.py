@@ -7,19 +7,19 @@ from pydantic import AnyHttpUrl, field_validator
 class Settings(BaseSettings):
     PROJECT_NAME: str = "AI-Powered eKYC & Fraud Detection Platform"
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = "super-secret-production-jwt-key-replace-in-production-use-strong-entropy"
-    ALGORITHM: str = "HS256"
+    SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", os.getenv("SECRET_KEY", "super-secret-production-jwt-key-replace-in-production-use-strong-entropy"))
+    ALGORITHM: str = os.getenv("JWT_ALGORITHM", os.getenv("ALGORITHM", "HS256"))
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
 
     # Google OAuth
-    GOOGLE_CLIENT_ID: str = "992314878877-vvul89n1rol4ohtbkebhse4fs2npkgtn.apps.googleusercontent.com"
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "992314878877-vvul89n1rol4ohtbkebhse4fs2npkgtn.apps.googleusercontent.com")
 
     # SMTP Configuration for Email OTP
-    SMTP_HOST: str = "smtp.gmail.com"
-    SMTP_PORT: int = 587
-    SMTP_USERNAME: Optional[str] = None
-    SMTP_PASSWORD: Optional[str] = None
-    SMTP_FROM_EMAIL: str = "noreply@ekyc-verification.ai"
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USERNAME: Optional[str] = os.getenv("SMTP_USERNAME", None)
+    SMTP_PASSWORD: Optional[str] = os.getenv("SMTP_PASSWORD", None)
+    SMTP_FROM_EMAIL: str = os.getenv("SMTP_FROM_EMAIL", "noreply@ekyc-verification.ai")
     OTP_EXPIRE_MINUTES: int = 5
     MAX_OTP_ATTEMPTS: int = 5
 
