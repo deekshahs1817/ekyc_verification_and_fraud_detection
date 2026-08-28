@@ -1,27 +1,21 @@
 import axios from 'axios';
 
 const getApiBaseUrl = (): string => {
-  if (process.env.REACT_APP_API_URL) {
-    let url = process.env.REACT_APP_API_URL.trim();
-    if (!url.endsWith('/api/v1')) {
-      url = url.replace(/\/+$/, '') + '/api/v1';
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8000/api/v1';
     }
-    return url;
   }
-  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
-    return 'https://ekyc-ai-backend.onrender.com/api/v1';
-  }
-  return 'http://localhost:8000/api/v1';
+  return 'https://ekyc-ai-backend.onrender.com/api/v1';
 };
 
 const getStaticBaseUrl = (): string => {
-  if (process.env.REACT_APP_STATIC_URL) {
-    return process.env.REACT_APP_STATIC_URL.replace(/\/+$/, '');
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://localhost:8000';
+    }
   }
-  if (typeof window !== 'undefined' && window.location.hostname.includes('onrender.com')) {
-    return 'https://ekyc-ai-backend.onrender.com';
-  }
-  return 'http://localhost:8000';
+  return 'https://ekyc-ai-backend.onrender.com';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
