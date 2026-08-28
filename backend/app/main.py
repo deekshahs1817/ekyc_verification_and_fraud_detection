@@ -41,12 +41,8 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
-        "https://ekyc-fraud-detection-app.onrender.com",
-        "https://huggingface.co",
-        "https://deeksha1817-ekyc-fraud-detection-app.hf.space",
-        "https://deekshahs1817.github.io",
     ],
-    allow_origin_regex=r"https://.*\.onrender\.com|https://.*\.hf\.space|https://.*huggingface\.co|https://.*\.github\.io|https://.*\.trycloudflare\.com|http://localhost:\d+",
+    allow_origin_regex=r"http://localhost:\d+|http://127\.0\.0\.1:\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -62,31 +58,14 @@ app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads"
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-# Mount React static build if available
-frontend_build = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/build"))
-if os.path.exists(frontend_build):
-    static_dir = os.path.join(frontend_build, "static")
-    if os.path.exists(static_dir):
-        app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        if full_path.startswith(("docs", "redoc", "openapi.json", "uploads", "api")):
-            return JSONResponse(status_code=404, content={"detail": "Not Found"})
-        
-        file_path = os.path.join(frontend_build, full_path)
-        if full_path and os.path.exists(file_path) and os.path.isfile(file_path):
-            return FileResponse(file_path)
-        return FileResponse(os.path.join(frontend_build, "index.html"))
-else:
-    @app.get("/")
-    def root():
-        return {
-            "system": settings.PROJECT_NAME,
-            "status": "OPERATIONAL",
-            "api_docs": "/docs",
-            "api_prefix": settings.API_V1_STR
-        }
+@app.get("/")
+def root():
+    return {
+        "system": settings.PROJECT_NAME,
+        "status": "OPERATIONAL",
+        "api_docs": "/docs",
+        "api_prefix": settings.API_V1_STR
+    }
 
 
 @app.get("/health")
