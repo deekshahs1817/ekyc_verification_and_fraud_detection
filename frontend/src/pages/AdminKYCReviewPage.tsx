@@ -15,6 +15,7 @@ import {
   Chip,
   Divider,
   LinearProgress,
+  Snackbar,
 } from '@mui/material';
 import {
   CheckCircle as ApproveIcon,
@@ -38,6 +39,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { kycApi, KYCRecord } from '../api/kycApi';
 import { adminApi } from '../api/adminApi';
 import { StatusBadge } from '../components/common/StatusBadge';
+import { generateKYCPdf } from '../utils/pdfGenerator';
 import { RiskScoreGauge } from '../components/common/RiskScoreGauge';
 import { API_BASE_URL, STATIC_BASE_URL } from '../api/client';
 
@@ -96,8 +98,8 @@ export const AdminKYCReviewPage: React.FC = () => {
 
   const downloadPdfReport = () => {
     if (record) {
-      const token = localStorage.getItem('ekyc_token') || '';
-      window.open(`${API_BASE_URL}/reports/download/${record.id}?token=${encodeURIComponent(token)}`, '_blank');
+      generateKYCPdf(record);
+      setActionSuccess('Official eKYC Verification Certificate PDF downloaded successfully!');
     }
   };
 
@@ -809,6 +811,23 @@ export const AdminKYCReviewPage: React.FC = () => {
           </Stack>
         </Grid>
       </Grid>
+
+      {/* Real-time Decision Notification */}
+      <Snackbar
+        open={Boolean(actionSuccess)}
+        autoHideDuration={5000}
+        onClose={() => setActionSuccess(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setActionSuccess(null)}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%', fontWeight: 700, borderRadius: 2 }}
+        >
+          {actionSuccess}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
