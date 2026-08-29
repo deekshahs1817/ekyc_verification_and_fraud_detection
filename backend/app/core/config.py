@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     ]
 
     # File Storage
-    UPLOAD_DIR: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../uploads"))
+    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", os.path.abspath(os.path.join(os.path.dirname(__file__), "../uploads")))
     MAX_UPLOAD_SIZE_MB: int = 15
 
     # Thresholds
@@ -57,6 +57,13 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# Ensure directories exist
+# Ensure directories exist safely without throwing uncaught permission exceptions
 for subfolder in ["aadhaar", "pan", "utility", "selfies", "heatmaps", "reports", "fingerprints"]:
-    os.makedirs(os.path.join(settings.UPLOAD_DIR, subfolder), exist_ok=True)
+    try:
+        os.makedirs(os.path.join(settings.UPLOAD_DIR, subfolder), exist_ok=True)
+    except Exception:
+        try:
+            settings.UPLOAD_DIR = os.path.join(os.path.expanduser("~"), ".ekyc_uploads")
+            os.makedirs(os.path.join(settings.UPLOAD_DIR, subfolder), exist_ok=True)
+        except Exception:
+            pass
