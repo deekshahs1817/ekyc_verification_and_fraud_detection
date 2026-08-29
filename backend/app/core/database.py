@@ -13,10 +13,11 @@ if raw_db_url and raw_db_url.startswith("postgresql"):
     try:
         engine = create_engine(
             raw_db_url,
-            pool_size=10,
-            max_overflow=20,
+            pool_size=5,
+            max_overflow=10,
             pool_pre_ping=True,
-            pool_recycle=300
+            pool_recycle=300,
+            connect_args={"connect_timeout": 5}
         )
         with engine.connect() as conn:
             pass
