@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /app/backend
 
 # Install system utilities safely
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -8,16 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY backend/requirements.txt ./backend/
-RUN pip install --no-cache-dir -r backend/requirements.txt
+COPY backend/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Backend application code
-COPY backend/ ./backend/
+COPY backend/ ./
 
 # Expose port
 EXPOSE 8000
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
 
-# Run FastAPI backend via production launcher
-CMD ["sh", "-c", "cd backend && python run.py"]
+# Run FastAPI backend directly with Python binary
+CMD ["python", "run.py"]
