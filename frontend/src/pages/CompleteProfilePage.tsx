@@ -58,6 +58,7 @@ export const CompleteProfilePage: React.FC = () => {
     if (user) {
       if (!fullName) setFullName(user.full_name || user.name || '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -10,7 +10,6 @@ import {
   Stack,
 } from '@mui/material';
 import {
-  Security as SecurityIcon,
   DocumentScanner as OcrIcon,
   Face as FaceIcon,
   Visibility as LivenessIcon,

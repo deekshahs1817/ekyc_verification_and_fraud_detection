@@ -13,7 +13,6 @@ import {
   Tab,
   Tabs,
   Chip,
-  Divider,
   LinearProgress,
   Snackbar,
 } from '@mui/material';
@@ -41,7 +40,7 @@ import { adminApi } from '../api/adminApi';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { generateKYCPdf } from '../utils/pdfGenerator';
 import { RiskScoreGauge } from '../components/common/RiskScoreGauge';
-import { API_BASE_URL, STATIC_BASE_URL } from '../api/client';
+import { STATIC_BASE_URL } from '../api/client';
 
 export const AdminKYCReviewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,6 +69,7 @@ export const AdminKYCReviewPage: React.FC = () => {
 
   useEffect(() => {
     fetchRecord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleReviewAction = async (newStatus: string) => {

@@ -1,0 +1,4 @@
+﻿name = "ekyc-fraud-detection"
+pages_build_output_dir = "./build"
+compatibility_date = "2024-01-01"
+

@@ -30,14 +30,10 @@ pip-wheel-metadata/
 *.sqlite
 *.db
 backend/ekyc_app.db
-backend/uploads/reports/*
-backend/uploads/heatmaps/*
-backend/uploads/selfies/*
-backend/uploads/aadhaar/*
-backend/uploads/pan/*
-backend/uploads/utility/*
-backend/uploads/fingerprints/*
+backend/uploads/**
+backend/app/uploads/**
 !backend/uploads/**/.gitkeep
+!backend/app/uploads/**/.gitkeep
 
 # Environment variables & secrets
 .env

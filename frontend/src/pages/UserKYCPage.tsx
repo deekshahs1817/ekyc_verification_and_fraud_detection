@@ -34,7 +34,6 @@ import { DocumentUploadZone } from '../components/kyc/DocumentUploadZone';
 import { WebcamCapture } from '../components/kyc/WebcamCapture';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { kycApi, KYCRecord } from '../api/kycApi';
-import { API_BASE_URL } from '../api/client';
 import { generateKYCPdf } from '../utils/pdfGenerator';
 
 const steps = ['Applicant Information', 'Upload Documents & Selfie', 'Submission Confirmation'];
