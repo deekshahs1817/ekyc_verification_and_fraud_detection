@@ -23,11 +23,8 @@ if raw_db_url and raw_db_url.startswith("postgresql"):
             pass
         logger.info("Connected successfully to PostgreSQL database with connection pooling.")
     except Exception as e:
-        if settings.USE_SQLITE_FALLBACK:
-            logger.warning(f"PostgreSQL connection failed ({e}). Falling back to SQLite: {settings.SQLITE_DB_URL}")
-            engine = create_engine(settings.SQLITE_DB_URL, connect_args={"check_same_thread": False})
-        else:
-            raise e
+        logger.warning(f"PostgreSQL connection attempt failed ({e}). Using high-speed SQLite fallback: {settings.SQLITE_DB_URL}")
+        engine = create_engine(settings.SQLITE_DB_URL, connect_args={"check_same_thread": False})
 else:
     engine = create_engine(settings.SQLITE_DB_URL, connect_args={"check_same_thread": False})
     logger.info(f"Using high-speed SQLite database: {settings.SQLITE_DB_URL}")
