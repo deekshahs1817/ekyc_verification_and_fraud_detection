@@ -17,13 +17,10 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 # Copy Backend application code
 COPY backend/ ./backend/
 
-# Create uploads directory and permissions
-RUN mkdir -p /app/backend/uploads && chmod -R 777 /app/backend/uploads
-
-# Expose Hugging Face standard port
-EXPOSE 7860
-ENV PORT=7860
+# Expose port
+EXPOSE 8000
+ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
 
-# Run FastAPI backend
-CMD ["sh", "-c", "cd backend && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
+# Run FastAPI backend via production launcher
+CMD ["sh", "-c", "cd backend && python run.py"]
