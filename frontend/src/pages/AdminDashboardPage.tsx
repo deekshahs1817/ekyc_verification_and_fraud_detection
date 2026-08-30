@@ -17,7 +17,6 @@ import {
   InputAdornment,
   CircularProgress,
   Stack,
-  Chip,
 } from '@mui/material';
 import {
   Assignment as QueueIcon,
@@ -28,15 +27,12 @@ import {
   Visibility as InspectIcon,
   Refresh as RefreshIcon,
   Person as PersonIcon,
-  LocalFireDepartment as FireIcon,
-  CalendarMonth as CalendarIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { StatCard } from '../components/common/StatCard';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { adminApi, DashboardStats } from '../api/adminApi';
 import { KYCRecord } from '../api/kycApi';
-import { getDeveloperStreak } from '../services/streakService';
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -146,122 +142,6 @@ export const AdminDashboardPage: React.FC = () => {
           </Grid>
         </Grid>
       )}
-
-      {/* Developer & Compliance Activity Streak Card */}
-      {(() => {
-        const streakData = getDeveloperStreak();
-        return (
-          <Paper
-            sx={{
-              p: 3,
-              mb: 4,
-              borderRadius: 3,
-              bgcolor: 'background.paper',
-              border: '1.5px solid',
-              borderColor: 'rgba(249, 115, 22, 0.3)',
-              boxShadow: '0 4px 20px rgba(249, 115, 22, 0.08)',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 4,
-                bgcolor: 'linear-gradient(90deg, #F97316 0%, #EAB308 50%, #10B981 100%)',
-              }}
-            />
-
-            <Grid container spacing={3} alignItems="center">
-              <Grid item xs={12} md={4}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box
-                    sx={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 3,
-                      bgcolor: 'rgba(249, 115, 22, 0.15)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '1px solid rgba(249, 115, 22, 0.4)',
-                    }}
-                  >
-                    <FireIcon sx={{ color: '#F97316', fontSize: 36 }} />
-                  </Box>
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="h5" sx={{ fontWeight: 800, color: 'text.primary' }}>
-                        {streakData.currentStreak}-Day Active Streak
-                      </Typography>
-                      <Chip
-                        label="100% ON TRACK"
-                        size="small"
-                        sx={{
-                          bgcolor: 'rgba(16, 185, 129, 0.15)',
-                          color: '#10B981',
-                          fontWeight: 800,
-                          fontSize: '0.68rem',
-                          border: '1px solid rgba(16, 185, 129, 0.3)',
-                        }}
-                      />
-                    </Box>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.3 }}>
-                      Continuous daily development, AI model integration & compliance audits
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-              <Grid item xs={12} md={8}>
-                <Grid container spacing={2}>
-                  {streakData.history.map((day) => (
-                    <Grid item xs={12} sm={6} key={day.date}>
-                      <Paper
-                        variant="outlined"
-                        sx={{
-                          p: 2,
-                          borderRadius: 2.5,
-                          bgcolor: day.status === 'ACTIVE_TODAY' ? 'rgba(59, 130, 246, 0.05)' : 'rgba(16, 185, 129, 0.05)',
-                          borderColor: day.status === 'ACTIVE_TODAY' ? 'rgba(59, 130, 246, 0.4)' : 'rgba(16, 185, 129, 0.4)',
-                        }}
-                      >
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                            <CalendarIcon sx={{ fontSize: 18, color: day.status === 'ACTIVE_TODAY' ? '#3B82F6' : '#10B981' }} />
-                            {day.label}
-                          </Typography>
-                          <Chip
-                            size="small"
-                            label={day.status === 'ACTIVE_TODAY' ? 'Day 2 • Active Today' : 'Day 1 • Completed'}
-                            sx={{
-                              fontWeight: 800,
-                              fontSize: '0.68rem',
-                              bgcolor: day.status === 'ACTIVE_TODAY' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                              color: day.status === 'ACTIVE_TODAY' ? '#3B82F6' : '#10B981',
-                            }}
-                          />
-                        </Box>
-                        <Stack spacing={0.6}>
-                          {day.milestones.slice(0, 2).map((m, idx) => (
-                            <Typography key={idx} variant="caption" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.6 }}>
-                              <Box component="span" sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'primary.main' }} />
-                              {m}
-                            </Typography>
-                          ))}
-                        </Stack>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
-        );
-      })()}
 
       {/* Filters & Search */}
       <Paper sx={{ p: 2.5, mb: 3, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
