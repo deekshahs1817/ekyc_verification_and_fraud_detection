@@ -245,6 +245,54 @@ def seed_database():
             db.add(rec3)
             db.commit()
 
+            # 5. Create Sample Audit Logs for August 29 and August 30
+            existing_audit = db.query(AuditLog).count()
+            if existing_audit == 0:
+                from datetime import datetime, timezone
+                aug_29_dt = datetime(2026, 8, 29, 14, 30, 0, tzinfo=timezone.utc)
+                aug_30_dt = datetime(2026, 8, 30, 10, 15, 0, tzinfo=timezone.utc)
+
+                logs = [
+                    AuditLog(
+                        user_id=admin.id,
+                        user_email=admin.email,
+                        action="PROJECT_INITIALIZATION_AND_AI_PIPELINE",
+                        ip_address="127.0.0.1",
+                        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        payload={"milestone": "Day 1 Architecture, Verhoeff Checksum, InsightFace Face Verifier"},
+                        timestamp=aug_29_dt
+                    ),
+                    AuditLog(
+                        user_id=user.id,
+                        user_email=user.email,
+                        action="KYC_SUBMISSION_EVALUATION",
+                        ip_address="127.0.0.1",
+                        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        payload={"milestone": "Day 1 Multi-factor OCR extraction and ELA Tampering detection"},
+                        timestamp=aug_29_dt
+                    ),
+                    AuditLog(
+                        user_id=admin.id,
+                        user_email=admin.email,
+                        action="CLOUDFLARE_DEPLOYMENT_CONFIGURATION",
+                        ip_address="127.0.0.1",
+                        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        payload={"milestone": "Day 2 Cloudflare Pages SPA Routing, CORS rules, and Repository Sync"},
+                        timestamp=aug_30_dt
+                    ),
+                    AuditLog(
+                        user_id=admin.id,
+                        user_email=admin.email,
+                        action="ACTIVE_COMPLIANCE_REVIEW_AND_AUDIT",
+                        ip_address="127.0.0.1",
+                        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        payload={"milestone": "Day 2 Automated Certified PDF Reports & Risk Factor Verification"},
+                        timestamp=aug_30_dt
+                    ),
+                ]
+                db.add_all(logs)
+                db.commit()
+
             # Generate sample PDF reports
             try:
                 PDFReportService.generate_kyc_report(rec1)

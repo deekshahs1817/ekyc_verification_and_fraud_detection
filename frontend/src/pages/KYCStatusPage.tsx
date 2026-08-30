@@ -18,12 +18,15 @@ import {
   DialogContent,
   DialogActions,
   Stack,
+  Grid,
 } from '@mui/material';
 import {
   PictureAsPdf as PdfIcon,
   Refresh as RefreshIcon,
   Visibility as ViewIcon,
   AdminPanelSettings as AdminIcon,
+  LocalFireDepartment as FireIcon,
+  CheckCircle as CheckIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -31,6 +34,7 @@ import { RootState } from '../store';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { kycApi, KYCRecord } from '../api/kycApi';
 import { API_BASE_URL } from '../api/client';
+import { getDeveloperStreak } from '../services/streakService';
 
 export const KYCStatusPage: React.FC = () => {
   const navigate = useNavigate();
@@ -82,6 +86,101 @@ export const KYCStatusPage: React.FC = () => {
           Refresh
         </Button>
       </Box>
+
+      {/* Activity Streak Banner */}
+      {(() => {
+        const streak = getDeveloperStreak();
+        return (
+          <Paper
+            sx={{
+              p: 2.5,
+              mb: 4,
+              borderRadius: 3,
+              bgcolor: 'background.paper',
+              border: '1.5px solid rgba(249, 115, 22, 0.3)',
+              boxShadow: '0 4px 16px rgba(249, 115, 22, 0.08)',
+            }}
+          >
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12} md={5}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 2.5,
+                      bgcolor: 'rgba(249, 115, 22, 0.15)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid rgba(249, 115, 22, 0.3)',
+                    }}
+                  >
+                    <FireIcon sx={{ color: '#F97316', fontSize: 30 }} />
+                  </Box>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
+                        {streak.currentStreak}-Day Active Verification Streak 🔥
+                      </Typography>
+                      <Chip
+                        label="ACTIVE"
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(16, 185, 129, 0.15)',
+                          color: '#10B981',
+                          fontWeight: 800,
+                          fontSize: '0.65rem',
+                        }}
+                      />
+                    </Box>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+                      Continuous daily activity: Aug 29 & Aug 30
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} md={7}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                  {streak.history.map((day) => (
+                    <Box
+                      key={day.date}
+                      sx={{
+                        flex: 1,
+                        p: 1.2,
+                        borderRadius: 2,
+                        bgcolor: day.status === 'ACTIVE_TODAY' ? 'rgba(59, 130, 246, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                        border: '1px solid',
+                        borderColor: day.status === 'ACTIVE_TODAY' ? 'rgba(59, 130, 246, 0.3)' : 'rgba(16, 185, 129, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Typography variant="caption" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.6 }}>
+                        <CheckIcon sx={{ color: '#10B981', fontSize: 14 }} />
+                        {day.label}
+                      </Typography>
+                      <Chip
+                        size="small"
+                        label={day.status === 'ACTIVE_TODAY' ? 'Active' : 'Passed'}
+                        sx={{
+                          height: 18,
+                          fontSize: '0.6rem',
+                          fontWeight: 700,
+                          bgcolor: day.status === 'ACTIVE_TODAY' ? '#3B82F6' : '#10B981',
+                          color: '#fff',
+                        }}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+              </Grid>
+            </Grid>
+          </Paper>
+        );
+      })()}
 
       {loading ? (
         <Box sx={{ textAlign: 'center', py: 8 }}>

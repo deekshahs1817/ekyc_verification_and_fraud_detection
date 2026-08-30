@@ -9,8 +9,14 @@ from app.core.database import engine, Base
 from app.core.logging import logger
 from app.api.v1 import api_router
 
-# Create database tables automatically
+from app.training.seed_data import seed_database
+
+# Create database tables automatically & seed initial verified state
 Base.metadata.create_all(bind=engine)
+try:
+    seed_database()
+except Exception as e:
+    logger.warning(f"Database auto-seed notice: {e}")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

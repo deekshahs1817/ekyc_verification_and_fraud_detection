@@ -28,6 +28,7 @@ import { RootState } from '../../store';
 import { logout } from '../../store/authSlice';
 import { useAppTheme } from '../../theme/ThemeContext';
 import { NotificationBell } from './NotificationBell';
+import { StreakBadge } from './StreakBadge';
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -175,6 +176,9 @@ export const Navbar: React.FC = () => {
                   </>
                 )}
 
+                {/* Persistent Daily Work Streak Badge */}
+                <StreakBadge />
+
                 {/* Real-time Activity Notification Bell */}
                 <NotificationBell />
 
@@ -214,7 +218,8 @@ export const Navbar: React.FC = () => {
             )}
 
             {!isAuthenticated && (
-              <Box sx={{ display: 'flex', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <StreakBadge />
                 <Button variant="outlined" color="primary" onClick={() => navigate('/login')}>
                   Sign In
                 </Button>
